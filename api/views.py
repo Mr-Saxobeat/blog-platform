@@ -3,6 +3,7 @@ from api import serializers
 from django.contrib.auth.models import User
 from api.models import Post, Comment, Category
 from rest_framework import permissions
+from rest_framework.renderers import TemplateHTMLRenderer
 from api.permissions import IsOwnerOrReadOnly
 
 
@@ -21,7 +22,20 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
                           IsOwnerOrReadOnly]
 
 
-class PostList(generics.ListCreateAPIView):
+class ListPosts(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = serializers.PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'api/post_list.html'
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        response.data = {'posts': response.data}
+        return response
+
+
+class CreatePost(generics.CreateAPIView):
     queryset = Post.objects.all()
     serializer_class = serializers.PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -35,6 +49,13 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'api/post_detail.html'
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        response.data = {'post': response.data}
+        return response
 
 
 class CommentList(generics.ListCreateAPIView):
