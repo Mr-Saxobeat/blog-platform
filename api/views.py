@@ -5,6 +5,9 @@ from api.models import Post, Comment, Category
 from rest_framework import permissions
 from rest_framework.renderers import TemplateHTMLRenderer
 from api.permissions import IsOwnerOrReadOnly
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.http import HttpResponseRedirect
 
 
 class CategoryList(generics.ListCreateAPIView):
@@ -27,7 +30,7 @@ class ListPosts(generics.ListAPIView):
     serializer_class = serializers.PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'api/post_list.html'
+    template_name = 'api/post/list_posts.html'
 
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
@@ -35,22 +38,34 @@ class ListPosts(generics.ListAPIView):
         return response
 
 
-class CreatePost(generics.CreateAPIView):
-    queryset = Post.objects.all()
-    serializer_class = serializers.PostSerializer
+class CreatePost(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'api/post/create_post.html'
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    def get(self, request, *args, **kwargs):
+        serializer = serializers.PostSerializer()
+        return Response({'serializer': serializer})
+    
+    def post(self, request, *args, **kwargs):
+        serializer = serializers.PostSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({'serializer': serializer})
+        serializer.save(owner=request.user)
+        # return Response({'serializer': serializer})
+        return HttpResponseRedirect(redirect_to='/posts')
 
-class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+
+class DetailPost(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = serializers.PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'api/post_detail.html'
+    template_name = 'api/post/detail_post.html'
 
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
