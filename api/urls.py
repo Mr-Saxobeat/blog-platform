@@ -7,7 +7,7 @@ urlpatterns = [
     path('users/<int:pk>/', views.UserDetail.as_view()),
     path('posts/', views.ListPosts.as_view()),
     path('posts/new/', views.CreatePost.as_view()),
-    path('posts/<int:pk>/', views.PostDetail.as_view()),
+    path('posts/<int:pk>/', views.DetailPost.as_view()),
     path('comments/', views.CommentList.as_view()),
     path('comments/<int:pk>/', views.CommentDetail.as_view()),
     path('categories/', views.CategoryList.as_view()),
