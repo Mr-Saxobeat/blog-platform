@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api.apps.ApiConfig',
+    'blog_ui.apps.BlogUiConfig',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            'api/templates'
+            'api/templates',
+            'blog_ui/templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
