@@ -7,7 +7,11 @@ from api.models import Post
 class CreatePost(View):
     def get(self, request, *args, **kwargs):
         post_serializer = PostSerializer()
-        return render(request, 'blog_ui/create_post.html', {'post_serializer': post_serializer})
+        context = {
+            'page_title': 'New Post',
+            'post_serializer': post_serializer
+            }
+        return render(request, 'blog_ui/create_post.html', context)
 
 
     def post(self, request, *args, **kwargs):
@@ -22,7 +26,11 @@ def list_posts(request):
     list_post_view = views.ListCreatePosts.as_view()
     data_response = list_post_view(request, format='json')
     data_json = data_response.render().data
-    context = {'posts': data_json}
+    context = {
+        'page_title': 'Posts',
+        'posts': data_json
+        }
+    return render(request, 'blog_ui/list_posts.html', context)
     return render(request, 'blog_ui/list_posts.html', context)
 
 
@@ -32,6 +40,7 @@ def detail_post(request, pk):
     data_json = data_response.render().data
     new_comment_serializer = CommentSerializer()
     context = {
+        'page_title': '',
         'post': data_json,
         'new_comment': new_comment_serializer
         }
@@ -42,7 +51,11 @@ class EditPost(View):
     def get(self, request, *args, **kwargs):
         post = Post.objects.get(pk=kwargs['pk'])
         post_serializer = PostSerializer(post)
-        return render(request, 'blog_ui/edit_post.html', {'post_serializer': post_serializer})
+        context = {
+            'page_title': 'Edit Post',
+            'post_serializer': post_serializer
+            }
+        return render(request, 'blog_ui/edit_post.html', context)
 
 
     def put(self, request, *args, **kwargs):
