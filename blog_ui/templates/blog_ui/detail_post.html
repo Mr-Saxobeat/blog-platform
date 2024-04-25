@@ -1,0 +1,36 @@
+{% extends "blog_ui/base.html" %}
+{% load rest_framework %}
+
+{% block content %}
+  <h1>{{ post.title }}</h1>
+  <p>{{ post.body }}</p>
+
+  {% if request.user.id == post.owner.id %}
+    <div>
+      <a href="/posts/{{ post.id }}/edit/">Edit</a>
+      <a href="/posts/{{ post.id }}/delete/">Delete</a>
+    </div>
+  {% endif %}
+
+  <h2>Comments</h2>
+  {% if post.comments %}
+    <p>{{ post.comments|length }} comments</p>
+  {% else %}
+    <p>No comments yet</p>
+  {% endif %}
+  <ul>
+    {% for comment in post.comments %}
+      <li>{{ comment.body }}</li>
+    {% endfor %}
+  </ul>
+  
+  {% if request.user.is_authenticated %}
+    <form action="/posts/{{ post.id }}/comment/" method="post">
+      {% csrf_token %}
+      {% render_form new_comment %}
+      <button type="submit">Comment</button>
+    </form>
+  {% endif %}
+
+{% endblock %}
+

@@ -1,0 +1,11 @@
+{% extends "blog_ui/base.html" %}
+{% load rest_framework %}
+
+{% block content %}
+    <h1>New post</h1>
+    <form method="put" action="/posts/{{ post_serializer.data.id }}/edit/">
+        {% csrf_token %}
+        {% render_form post_serializer %}
+        <button type="submit">Update post</button>
+    </form>
+{% endblock %}
