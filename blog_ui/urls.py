@@ -5,11 +5,13 @@ from blog_ui import views
 
 urlpatterns = [
     path('', views.list_posts),
+    path('posts/', views.list_posts),
     path('posts/new/', login_required(views.CreatePost.as_view(), login_url='/api-auth/login/?next=/')),
     path('posts/<int:pk>/', views.detail_post),
     path('posts/<int:pk>/edit/', login_required(views.EditPost.as_view(), login_url='/api-auth/login/?next=/')),
     path('posts/<int:pk>/delete/', login_required(views.delete_post, login_url='/api-auth/login/?next=/')),
     path('posts/<int:pk>/comment/', login_required(views.create_comment, login_url='/api-auth/login/?next=/')),
+    path('posts/drafts/', login_required(views.list_drafts_posts, login_url='/api-auth/login/?next=/')),
 ]
 
 
