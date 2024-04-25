@@ -20,14 +20,21 @@
   {% endif %}
   <ul>
     {% for comment in post.comments %}
-      <li>{{ comment.body }}</li>
+      <li><b>{{ comment.owner }}</b> commented:</li>
+      <ul>
+        <li>{{ comment.body }}</li>
+      </ul>
     {% endfor %}
   </ul>
   
   {% if request.user.is_authenticated %}
     <form action="/posts/{{ post.id }}/comment/" method="post">
       {% csrf_token %}
-      {% render_form new_comment %}
+      <input type="hidden" name="post" value="{{ post.id }}">
+      <div class="form-group">
+        <label for="">New Comment</label>
+        <textarea name="body" id="comment-body"></textarea>
+      </div>
       <button type="submit">Comment</button>
     </form>
   {% endif %}
