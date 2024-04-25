@@ -34,6 +34,18 @@ def list_posts(request):
         'posts': data_json
         }
     return render(request, 'blog_ui/list_posts.html', context)
+
+def list_drafts_posts(request):
+    request_get = request.GET.copy()
+    request_get['status'] = 'draft'
+    request.GET = request_get
+    list_drafts_posts_view = views.ListCreatePosts.as_view()
+    data_response = list_drafts_posts_view(request, format='json')
+    data_json = data_response.render().data
+    context = {
+        'page_title': 'Draft Posts',
+        'posts': data_json
+        }
     return render(request, 'blog_ui/list_posts.html', context)
 
 
