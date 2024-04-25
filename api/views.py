@@ -3,11 +3,8 @@ from api import serializers
 from django.contrib.auth.models import User
 from api.models import Post, Comment, Category
 from rest_framework import permissions
-from rest_framework.renderers import TemplateHTMLRenderer
 from api.permissions import IsOwnerOrReadOnly
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.http import HttpResponseRedirect
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class ListCreateCategory(generics.ListCreateAPIView):
@@ -42,6 +39,12 @@ class DetailPost(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
+    
+    def put(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.status == 'published':
+            request.data.pop('status')
+        return super().put(request, *args, **kwargs)
 
 
 class ListCreateComments(generics.ListCreateAPIView):
