@@ -2,8 +2,14 @@
 {% load rest_framework %}
 
 {% block page_content %}
+    <form method="post" action="/posts/{{ post_serializer.data.id }}/edit/">
         {% csrf_token %}
         {% render_form post_serializer %}
-        <button type="submit">Update post</button>
+        {% if post_serializer.data.status == 'published' %}
+            <button type="submit">Update post</button>
+        {% else %}
+            <button type="submit" name="status" value="published">Publish</button>
+            <button type="submit" name="status" value="draft">Save as draft</button>
+        {% endif %}
     </form>
 {% endblock %}

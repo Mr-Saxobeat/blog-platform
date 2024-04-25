@@ -5,6 +5,7 @@
     <form method="post" action="/posts/new/">
         {% csrf_token %}
         {% render_form post_serializer %}
-        <button type="submit">Create post</button>
+        <button type="submit" name="status" value="published">Create post</button>
+        <button type="submit" name="status" value="draft">Save as draft</button>
     </form>
 {% endblock %}
