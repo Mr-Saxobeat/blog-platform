@@ -1,10 +1,15 @@
 from django.db import models
 
 class Post(models.Model):
+    STATUS_CHOICES = (
+        ('D', 'draft'),
+        ('P', 'published'),
+    )
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
     body = models.TextField(blank=True, default='')
     owner = models.ForeignKey('auth.User', related_name='posts', on_delete=models.CASCADE)
+    status = models.CharField(choices=STATUS_CHOICES, default='draft', max_length=50)
 
     class Meta:
         ordering = ['created']
