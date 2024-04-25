@@ -12,31 +12,33 @@
     </div>
   {% endif %}
 
-  <h2>Comments</h2>
-  {% if post.comments %}
-    <p>{{ post.comments|length }} comments</p>
-  {% else %}
-    <p>No comments yet</p>
-  {% endif %}
-  <ul>
-    {% for comment in post.comments %}
-      <li><b>{{ comment.owner }}</b> commented:</li>
-      <ul>
-        <li>{{ comment.body }}</li>
-      </ul>
-    {% endfor %}
-  </ul>
-  
-  {% if request.user.is_authenticated %}
-    <form action="/posts/{{ post.id }}/comment/" method="post">
-      {% csrf_token %}
-      <input type="hidden" name="post" value="{{ post.id }}">
-      <div class="form-group">
-        <label for="">New Comment</label>
-        <textarea name="body" id="comment-body"></textarea>
-      </div>
-      <button type="submit">Comment</button>
-    </form>
+  {% if post.status == "published" %}
+    <h2>Comments</h2>
+    {% if post.comments %}
+      <p>{{ post.comments|length }} comments</p>
+    {% else %}
+      <p>No comments yet</p>
+    {% endif %}
+    <ul>
+      {% for comment in post.comments %}
+        <li><b>{{ comment.owner }}</b> commented:</li>
+        <ul>
+          <li>{{ comment.body }}</li>
+        </ul>
+      {% endfor %}
+    </ul>
+    
+    {% if request.user.is_authenticated %}
+      <form action="/posts/{{ post.id }}/comment/" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="post" value="{{ post.id }}">
+        <div class="form-group">
+          <label for="">New Comment</label>
+          <textarea name="body" id="comment-body"></textarea>
+        </div>
+        <button type="submit">Comment</button>
+      </form>
+    {% endif %}
   {% endif %}
 
 {% endblock %}
