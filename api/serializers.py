@@ -49,6 +49,7 @@ class PostSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
     categories = CategorySerializer(many=True, read_only=True)
+    status = serializers.CharField(style={'template': 'blog_ui/field_templates/not_render.html', 'hide_label': 'true'})
 
     class Meta:
         model = Post
