@@ -30,6 +30,8 @@ class ListCreatePosts(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = serializers.PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = '__all__'
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
