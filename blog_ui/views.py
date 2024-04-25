@@ -58,9 +58,10 @@ class EditPost(View):
         return render(request, 'blog_ui/edit_post.html', context)
 
 
-    def put(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
+        request.method = 'PUT'
         create_post_view = views.DetailPost.as_view()
-        data_response = create_post_view(request, pk=kwargs['pk'],format='json')
+        data_response = create_post_view(request, pk=kwargs['pk'], format='json')
         data_json = data_response.render().data
         post_id = data_json['id']
         return redirect(f'/posts/{post_id}/')
