@@ -23,6 +23,9 @@ class CreatePost(View):
 
 
 def list_posts(request):
+    request_get = request.GET.copy()
+    request_get['status'] = 'published'
+    request.GET = request_get
     list_post_view = views.ListCreatePosts.as_view()
     data_response = list_post_view(request, format='json')
     data_json = data_response.render().data
