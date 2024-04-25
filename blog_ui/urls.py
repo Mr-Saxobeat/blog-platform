@@ -9,7 +9,7 @@ urlpatterns = [
     path('posts/<int:pk>/', views.detail_post),
     path('posts/<int:pk>/edit/', login_required(views.EditPost.as_view(), login_url='/api-auth/login/?next=/')),
     path('posts/<int:pk>/delete/', login_required(views.delete_post, login_url='/api-auth/login/?next=/')),
-    path('posts/<int:pk>/comments/', login_required(views.create_comment, login_url='/api-auth/login/?next=/')),
+    path('posts/<int:pk>/comment/', login_required(views.create_comment, login_url='/api-auth/login/?next=/')),
 ]
 
 
