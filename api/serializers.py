@@ -10,13 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            'id',
-            'username',
-            'posts',
-            'comments',
-            'categories'
-            ]
+        fields = '__all__'
 
 class CategorySerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
@@ -24,12 +18,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = [
-            'id',
-            'name',
-            'owner',
-            'posts'
-            ]
+        fields = '__all__'
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -37,12 +26,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = [
-            'id',
-            'body',
-            'owner',
-            'post'
-            ]
+        fields = '__all__'
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -53,11 +37,4 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = [
-            'id',
-            'title',
-            'body',
-            'owner',
-            'comments',
-            'categories'
-            ]
+        fields = '__all__'
