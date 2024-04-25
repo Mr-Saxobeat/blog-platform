@@ -62,7 +62,6 @@ def delete_post(request, pk):
 
 def create_comment(request, pk):
     create_comment_view = views.ListCreateComments.as_view()
-    data_response = create_comment_view(request, pk=pk, format='json')
-    data_json = data_response.render().data
-    post_id = data_json['id']
+    create_comment_view(request, format='json')
+    post_id = pk
     return redirect(f'/posts/{post_id}/')
