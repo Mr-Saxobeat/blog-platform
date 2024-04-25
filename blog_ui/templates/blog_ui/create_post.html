@@ -1,8 +1,7 @@
 {% extends "blog_ui/base.html" %}
 {% load rest_framework %}
 
-{% block content %}
-    <h1>New post</h1>
+{% block page_content %}
     <form method="post" action="/posts/new/">
         {% csrf_token %}
         {% render_form post_serializer %}

@@ -1,8 +1,8 @@
 {% extends "blog_ui/base.html" %}
 {% load rest_framework %}
 
-{% block content %}
-  <h1>{{ post.title }}</h1>
+{% block page_content %}
+  <h2>{{ post.title }} {% if post.status == 'draft' %}<i>(not published)</i>{% endif %}</h2>
   <p>{{ post.body }}</p>
 
   {% if request.user.id == post.owner.id %}
