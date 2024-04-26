@@ -5,6 +5,10 @@ services:
     image: postgres
     volumes:
       - ./data/db:/var/lib/postegresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_NAME=postgres
     ports:
       - 5432:5432
 
