@@ -5,6 +5,7 @@
     {% for post in posts %}
       <li>
         <a href="/posts/{{ post.id }}">{{ post.title }}</a>
+        <i>- by <a href="/posts/?owner={{ post.owner.id }}">{{ post.owner.username }}</a></i>
       </li>
     {% endfor %}
   </ul>
