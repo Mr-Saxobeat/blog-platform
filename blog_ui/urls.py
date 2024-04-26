@@ -5,6 +5,7 @@ from blog_ui import views
 
 urlpatterns = [
     path('', views.list_posts),
+    path('create-user/', views.CreateUser.as_view()),
     path('posts/', views.list_posts),
     path('posts/new/', login_required(views.CreatePost.as_view(), login_url='/api-auth/login/?next=/')),
     path('posts/<int:pk>/', views.detail_post),
