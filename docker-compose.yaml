@@ -28,5 +28,6 @@ services:
       - DB_NAME=postgres
       - DB_USER=postgres
       - DB_PASSWORD=postgres
+      - DEBUG=True
     depends_on:
       - blog-db
