@@ -3,6 +3,7 @@ from api import views
 from api.serializers import PostSerializer, CommentSerializer
 from django.views import View
 from api.models import Post
+from django.contrib.auth.forms import UserCreationForm
 
 class CreatePost(View):
     def get(self, request, *args, **kwargs):
@@ -94,3 +95,20 @@ def create_comment(request, pk):
     create_comment_view(request, format='json')
     post_id = pk
     return redirect(f'/posts/{post_id}/')
+
+
+class CreateUser(View):
+    def get(self, request, *args, **kwargs):
+        user_creation_form = UserCreationForm()  
+        context = {
+            'page_title': 'New User',
+            'user_creation_form': user_creation_form,
+        }
+        return render(request, 'blog_ui/create_user.html', context)
+
+
+    def post(self, request, *args, **kwargs):
+        form = UserCreationForm(request.POST)  
+        if form.is_valid():  
+            form.save() 
+        return redirect('/api-auth/login/?next=/')
