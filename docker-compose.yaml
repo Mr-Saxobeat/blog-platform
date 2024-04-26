@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  blog-db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postegresql/data
+    ports:
+      - 5432:5432
+
+  blog-platform:
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/blog-platform
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=blog-db
+      - DB_PORT=5432
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    depends_on:
+      - blog-db
