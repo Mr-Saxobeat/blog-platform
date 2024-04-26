@@ -1,26 +1,10 @@
 from rest_framework import generics
 from api import serializers
 from django.contrib.auth.models import User
-from api.models import Post, Comment, Category
+from api.models import Post, Comment
 from rest_framework import permissions
 from api.permissions import IsOwnerOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
-
-
-class ListCreateCategory(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = serializers.CategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-
-class DetailCategory(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
-    serializer_class = serializers.PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly]
 
 
 class ListCreatePosts(generics.ListCreateAPIView):
