@@ -10,14 +10,14 @@ services:
       - POSTGRES_NAME=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
-      - ${PORT}:${PORT}
+      - ${DB_PORT}:${DB_PORT}
 
   blog-platform:
     build: .
     command: >
       sh -c "python manage.py collectstatic --no-input &&
              python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:${PORT}"
+             python manage.py runserver 0.0.0.0:${DB_PORT}"
     volumes:
       - .:/blog-platform
     ports:
