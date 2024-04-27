@@ -21,7 +21,7 @@ services:
     volumes:
       - .:/blog-platform
     ports:
-      - "${PORT}:${PORT}"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
