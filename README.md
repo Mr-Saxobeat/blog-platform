@@ -43,3 +43,58 @@ blog-platform-1  | Watching for file changes with StatReloader
 
 Then just go to [http://127.0.0.1:8000/](http://127.0.0.1:8000/) and you get the blog platform.
 Make sure your browser accepts http connections.
+
+
+## Manually
+
+If you want to run the django server manually, first you need to setup a PostgreSQL database.
+Then, rename the `.env-dev` file to `.env` and replace the env vars with your credentials and host:
+
+```
+# .env file
+
+DB_NAME=# Your database name
+DB_USER=# Your username
+DB_HOST=# Your database host
+DB_PORT=# Your database port
+DEBUG=False
+SERVER_PORT=8000
+DB_PASSWORD=# Your database password
+SECRET_KEY=# Your secret key
+```
+
+At the root of the repo create a python virtual environment:
+
+```
+python -m venv .venv
+```
+
+Activate the virtual env:
+
+```
+source .venv/bin/activate
+```
+
+Install the requirements:
+
+```
+pip install -r requirements.txt
+```
+
+Collect the django static files:
+
+```
+python manage.py collectstatic --no-input
+```
+
+Migrate the databse:
+
+```
+python manage.py migrate
+```
+
+And run the server:
+
+```
+python manage.py runserver
+```
