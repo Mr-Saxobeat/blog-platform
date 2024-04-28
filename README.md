@@ -3,11 +3,11 @@
 This is a mini blog platform where you can post you ideas.
 It's built on Django 4.2.11 and Django Rest Framework 3.15.1, using the django template sytem to the frontend.
 
-# Setup
+## Setup
 
 You can setup the project on docker or manually.
 
-## Docker
+### Docker
 
 Fisrt, make sure you have the 5432 and the 8000 ports free, because its the database and the servers ports used, respectively.
 
@@ -44,8 +44,9 @@ blog-platform-1  | Watching for file changes with StatReloader
 Then just go to [http://127.0.0.1:8000/](http://127.0.0.1:8000/) and you get the blog platform.
 Make sure your browser accepts http connections.
 
+--------------------------------------------------------------------------------
 
-## Manually
+### Manually
 
 If you want to run the django server manually, first you need to setup a PostgreSQL database.
 Then, rename the `.env-dev` file to `.env` and replace the env vars with your credentials and host:
