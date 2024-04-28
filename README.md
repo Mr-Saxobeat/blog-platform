@@ -99,3 +99,5 @@ And run the server:
 ```
 python manage.py runserver
 ```
+
+You can check the api urls at [http://127.0.0.1:8000/swagger/](http://127.0.0.1:8000/swagger/)
