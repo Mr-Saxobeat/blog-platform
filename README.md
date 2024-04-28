@@ -7,6 +7,8 @@ For a RESTful API it was used Django Rest Framework 3.15.1.
 For a minimal frontend, it was used the django template system, that consume the REST views.
 You can check all the api endpoints on the ``/swagger`` endpoint.
 
+After your setup, you can create an account, create your posts and comment on others posts.
+
 ## Setup
 
 You can setup the project using docker or manually.
@@ -49,18 +51,12 @@ blog-platform-1  | Watching for file changes with StatReloader
 Then just go to [http://127.0.0.1:8000/](http://127.0.0.1:8000/) and you get the blog platform.
 **Make sure your browser accepts HTTP connections.**
 
-If you want to run a container only with the django project and setup your own postgres instance, run the compose up command pointing to `docker-compose-without-postgres.yaml` file:
-
-```bash
-docker compose -f docker-compose-without-postgres.yaml up
-```
-
 --------------------------------------------------------------------------------
 
 ### Manually
 
 If you want to run the django server manually, first you need to setup a PostgreSQL database.
-Then, rename the `.env-dev` file to `.env` and replace the env vars with your credentials and host:
+Then, rename the `.env-dev` file to `.env` and replace the env vars with your database infos.
 
 ```txt
 # .env file
@@ -93,7 +89,7 @@ Install the requirements:
 pip install -r requirements.txt
 ```
 
-Collect the django static files:
+Collect the django static files. If here you get the `PermissionError`, don't bother and move on.
 
 ```bash
 python manage.py collectstatic --no-input
