@@ -9,34 +9,37 @@ You can setup the project on docker or manually.
 
 ## Docker
 
-You can run docker compose at the root of the repository. 
-
 Fisrt, make sure you have the 5432 and the 8000 ports free, because its the database and the servers ports used, respectively.
+
+Rename the ``.env-dev`` to ``.env`` and fill up the ``DB_PASSWORD`` and ``SECRET_KEY`` with your values.
+You can get a new secret key here: [https://djecrety.ir/](https://djecrety.ir/)
+
+Then, at the root of the repository, you run:
 
 ````bash
 docker compose up
 ````
 
+This will compose the docker from the ``docker-compose.yaml`` file.
+
 After the pulling and building you will see something like this:
 
 ```bash
-Attaching to blog-db-1, blog-platform-1
-blog-db-1        | 
-blog-db-1        | PostgreSQL Database directory appears to contain a database; Skipping initialization
-blog-db-1        | 
-blog-db-1        | 2024-04-27 14:01:42.741 UTC [1] LOG:  starting PostgreSQL 16.2 (Debian 16.2-1.pgdg120+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
-blog-db-1        | 2024-04-27 14:01:42.742 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
-blog-db-1        | 2024-04-27 14:01:42.742 UTC [1] LOG:  listening on IPv6 address "::", port 5432
-blog-db-1        | 2024-04-27 14:01:42.743 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
-blog-db-1        | 2024-04-27 14:01:42.748 UTC [29] LOG:  database system was shut down at 2024-04-27 13:57:07 UTC
-blog-db-1        | 2024-04-27 14:01:42.754 UTC [1] LOG:  database system is ready to accept connections
-blog-platform-1  | 
-blog-platform-1  | 161 static files copied to '/blog-platform/static'.
-blog-platform-1  | Operations to perform:
-blog-platform-1  |   Apply all migrations: admin, api, auth, contenttypes, sessions
-blog-platform-1  | Running migrations:
-blog-platform-1  |   No migrations to apply.
+blog-platform-1  |   Applying auth.0002_alter_permission_name_max_length... OK
+blog-platform-1  |   Applying auth.0003_alter_user_email_max_length... OK
+blog-platform-1  |   Applying auth.0004_alter_user_username_opts... OK
+blog-platform-1  |   Applying auth.0005_alter_user_last_login_null... OK
+blog-platform-1  |   Applying auth.0006_require_contenttypes_0002... OK
+blog-platform-1  |   Applying auth.0007_alter_validators_add_error_messages... OK
+blog-platform-1  |   Applying auth.0008_alter_user_username_max_length... OK
+blog-platform-1  |   Applying auth.0009_alter_user_last_name_max_length... OK
+blog-platform-1  |   Applying auth.0010_alter_group_name_max_length... OK
+blog-platform-1  |   Applying auth.0011_update_proxy_permissions... OK
+blog-platform-1  |   Applying auth.0012_alter_user_first_name_max_length... OK
+blog-platform-1  |   Applying sessions.0001_initial... OK
 blog-platform-1  | Watching for file changes with StatReloader
+
 ```
 
-Then just go to [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+Then just go to [http://127.0.0.1:8000/](http://127.0.0.1:8000/) and you get the blog platform.
+Make sure your browser accepts http connections.
