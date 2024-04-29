@@ -100,7 +100,7 @@ You can check the api urls at [http://127.0.0.1:8000/swagger/](http://127.0.0.1:
 
 As a non authenticated user you can make requests to the `/posts/`endpoint.
 
-But, to make authenticated requests to the api first you need to authenticate:
+But, to make authenticated requests to the api you need to authenticate:
 1. Make a POST request to `/api-token-auth/` with a body like the following:
 ```json
 {
@@ -109,13 +109,16 @@ But, to make authenticated requests to the api first you need to authenticate:
 }
 ```
 2. Store the returned token
-3. To make any other authenticated request, set the token in header with the key `Authorization` and the value with `Token <your-token>`
+3. To make any other authenticated request, set the token in the header request with the key `Authorization` and the value with `Token <your-token>`:
+```
+Authorization: "Token <your-token>"
+```
 4. Note the value has a white space between `Token` and the token itself.
 5. You're ready to use the core backend with your client!
 
 ### Test coverage
 
-The tests were created only for the `api/views.py` and `api/permissions.py` files because the main purpose was to test only
+The tests were created only for the `api/views.py`, `api/permissions.py` and `api/serializers.py` files because the main purpose was to test only
 the api side of the project.
 
 You can run the tests with the command:
