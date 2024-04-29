@@ -80,3 +80,28 @@ class TestDetailPostView(TestCase):
         mock_data.pop.assert_not_called()
         mock_super().put.assert_called_once_with(mock_request)
 
+
+class TestListCreateComments(TestCase):
+    def test_view_properties(self):
+        # Given
+        view = ListCreateComments()
+
+        # Then
+        self.assertEqual(view.queryset.model.__name__, 'Comment')
+        self.assertEqual(view.serializer_class.__name__, 'CommentSerializer')
+        self.assertEqual(view.permission_classes, [IsAuthenticatedOrReadOnly])
+
+
+    def test_perform_create(self):
+        # Given
+        mock_request = Mock(user='mock_user')
+        view = ListCreateComments()
+        view.request = mock_request
+        mock_serializer = Mock()
+        mock_serializer.save = Mock()
+
+        # When
+        view.perform_create(mock_serializer)
+
+        # Then
+        mock_serializer.save.assert_called_once_with(owner=mock_request.user)
