@@ -188,3 +188,26 @@ class TestPermissions(TestCase):
 
         # Then
         self.assertEqual(result, expected)
+
+
+class TestUserSerializer(TestCase):
+    @patch('api.serializers.User.objects')
+    def test_create(self, mock_user_objects):
+        # Given
+        serializer = UserSerializer()
+        mock_validated_data = {
+            'username': 'test_username',
+            'password': 'test_password'
+        }
+        mock_user_objects.create_user = Mock(return_value=mock_validated_data)
+
+        # When
+        result = serializer.create(mock_validated_data)
+
+        # Then
+        mock_user_objects.create_user.assert_called_once_with(
+            username=mock_validated_data['username'],
+            password=mock_validated_data['password']
+        )
+        self.assertEqual(result, mock_validated_data)
+
