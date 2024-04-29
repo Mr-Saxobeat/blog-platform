@@ -3,6 +3,7 @@ from rest_framework.generics import (
 )
 from api import serializers
 from django.contrib.auth.models import User
+from api.filters import DraftOwnerFilterBackend
 from api.models import Post, Comment
 from rest_framework import permissions
 from api.permissions import IsOwnerOrReadOnly
@@ -15,7 +16,7 @@ class ListCreatePosts(ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DraftOwnerFilterBackend]
     filterset_fields = '__all__'
 
     def perform_create(self, serializer):
