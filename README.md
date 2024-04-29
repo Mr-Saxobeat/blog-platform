@@ -98,9 +98,20 @@ You can check the api urls at [http://127.0.0.1:8000/swagger/](http://127.0.0.1:
 
 ### Using a outside client to the backend api:
 
-To make authenticated requests to the api first you need to authenticate:
+As a non authenticated user you can make requests to the `/posts/`endpoint.
 
-1. 
+But, to make authenticated requests to the api first you need to authenticate:
+1. Make a POST request to `/api-token-auth/` with a body like the following:
+```json
+{
+    "username": "your-username",
+    "password": "your-password"
+}
+```
+2. Store the returned token
+3. To make any other authenticated request, set the token in header with the key `Authorization` and the value with `Token <your-token>`
+4. Note the value has a white space between `Token` and the token itself.
+5. You're ready to use the core backend with your client!
 
 ### Test coverage
 
