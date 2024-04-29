@@ -7,6 +7,7 @@ from api.views import (
     DetailComment, DetailUser, ListCreateComments, ListCreatePosts,
     DetailPost, ListCreateUsers
     )
+from parameterized import parameterized
 
 class TestListCreatePostsView(TestCase):
     def test_view_properties(self):
@@ -140,3 +141,40 @@ class TestListCreateUsers(TestCase):
         self.assertEqual(view.queryset.model.__name__, 'User')
         self.assertEqual(view.serializer_class.__name__, 'UserSerializer')
 
+
+class TestPermissions(TestCase):
+    @parameterized.expand([
+        ('GET', 'same_owner', 'same_owner', True),
+        ('GET', 'different_owner', 'another_owner', True),
+
+        ('HEAD', 'same_owner', 'same_owner', True),
+        ('HEAD', 'different_owner', 'another_owner', True),
+        
+        ('OPTIONS', 'same_owner', 'same_owner', True),
+        ('OPTIONS', 'different_owner', 'another_owner', True),
+
+        ('POST', 'same_owner', 'same_owner', True),
+        ('POST', 'different_owner', 'another_owner', False),
+
+        ('PUT', 'same_owner', 'same_owner', True),
+        ('PUT', 'different_owner', 'another_owner', False),
+
+        ('PATCH', 'same_owner', 'same_owner', True),
+        ('PATCH', 'different_owner', 'another_owner', False),
+
+        ('DELETE', 'same_owner', 'same_owner', True),
+        ('DELETE', 'different_owner', 'another_owner', False),
+    ])
+    def test_IsOwnerOrReadOnly(self, method, obj_owner, request_user, expected):
+        # Given
+        permission = IsOwnerOrReadOnly()
+
+        mock_request = Mock(user=request_user, method=method)
+        mock_obj = Mock(owner=obj_owner)
+        mock_view = Mock()
+
+        # When
+        result = permission.has_object_permission(mock_request, mock_view, mock_obj)
+
+        # Then
+        self.assertEqual(result, expected)
