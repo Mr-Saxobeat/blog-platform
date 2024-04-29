@@ -3,6 +3,7 @@ from unittest.mock import patch, Mock, MagicMock
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from api.permissions import IsOwnerOrReadOnly
+from api.serializers import PostSerializer, UserSerializer
 from api.views import (
     DetailComment, DetailUser, ListCreateComments, ListCreatePosts,
     DetailPost, ListCreateUsers
@@ -47,53 +48,60 @@ class TestDetailPostView(TestCase):
         self.assertEqual(view.permission_classes, [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly])
 
 
-    @patch('api.views.super')
-    def test_put_published(self, mock_super):
+    @parameterized.expand([
+        ['published', 'published', True],
+        ['published', 'published', False],
+        ['published', 'draft', True],
+        ['published', 'draft', False],
+        ['draft', 'published', True],
+        ['draft', 'published', False],
+        ['draft', 'draft', True],
+        ['draft', 'draft', False],
+    ])
+    @patch('api.views.PostSerializer')
+    def test_put(self, data_status, object_status, is_valid_return, mock_serializer):
         # Given
-        data_dict = {'status': 'published'}
+        mock_is_valid = Mock(return_value=is_valid_return)
+        mock_serializer.is_valid = mock_is_valid
+
+        mock_save = Mock()
+        mock_serializer.save = mock_save
+
+        mock_serializer = Mock(is_valid=mock_is_valid, save=mock_save)
+        mock_serializer_class = Mock(return_value=mock_serializer)
+
+        view = Mock()
+        view.serializer_class = mock_serializer_class
+        view.put = DetailPost.put
+
+        mock_post_object = Mock(
+            title='mock_title',
+            body='mock_body',
+            status=object_status
+        )
+        view.get_object = Mock(return_value=mock_post_object)
+
+        data_dict = {
+            'title': 'mock_title_modified',
+            'body': 'mock_body_modified',
+            'status': data_status
+        }
         mock_data = MagicMock()
         mock_data.__getitem__.side_effect = data_dict.__getitem__
-        mock_data.pop = Mock()
-
+        mock_data.get = Mock()
         mock_request = Mock(data=mock_data)
 
-        mock_view = Mock(spec=DetailPost)
-        mock_view.request = mock_request
-        mock_view.get_object = Mock(return_value=Mock(status='published'))
-        mock_view.put = DetailPost.put
-
-        mock_super().put = Mock()
-
         # When
-        mock_view.put(mock_view, mock_request)
+        view.put(view, mock_request)
 
         # Then
-        mock_data.pop.assert_called_once_with('status')
-        mock_super().put.assert_called_once_with(mock_request)
-
-    @patch('api.views.super')
-    def test_put_draft(self, mock_super):
-        # Given
-        data_dict = {'status': 'draft'}
-        mock_data = MagicMock()
-        mock_data.__getitem__.side_effect = data_dict.__getitem__
-        mock_data.pop = Mock()
-
-        mock_request = Mock(data=mock_data)
-
-        mock_view = Mock(spec=DetailPost)
-        mock_view.request = mock_request
-        mock_view.get_object = Mock(return_value=Mock(status='draft'))
-        mock_view.put = DetailPost.put
-
-        mock_super().put = Mock()
-
-        # When
-        mock_view.put(mock_view, mock_request)
-
-        # Then
-        mock_data.pop.assert_not_called()
-        mock_super().put.assert_called_once_with(mock_request)
+        if is_valid_return == True:
+            mock_save.assert_called_once()
+        else:
+            mock_save.assert_not_called()
+        
+        if data_status != 'published':
+            mock_data.get.assert_called_with('status', object_status)
 
 
 class TestListCreateCommentsView(TestCase):
