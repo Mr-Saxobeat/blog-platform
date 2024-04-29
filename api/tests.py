@@ -37,6 +37,16 @@ class TestListCreatePostsView(TestCase):
         mock_serializer.save.assert_called_once_with(owner=mock_request.user)
 
 class TestDetailPostView(TestCase):
+    def test_view_properties(self):
+        # Given
+        view = DetailPost()
+
+        # Then
+        self.assertEqual(view.queryset.model.__name__, 'Post')
+        self.assertEqual(view.serializer_class.__name__, 'PostSerializer')
+        self.assertEqual(view.permission_classes, [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly])
+
+
     @patch('api.views.super')
     def test_put_published(self, mock_super):
         # Given
