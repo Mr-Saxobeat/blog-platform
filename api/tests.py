@@ -2,7 +2,11 @@ from django.test import TestCase
 from unittest.mock import patch, Mock, MagicMock
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
-from api.views import ListCreatePosts, DetailPost
+from api.permissions import IsOwnerOrReadOnly
+from api.views import (
+    DetailComment, DetailUser, ListCreateComments, ListCreatePosts,
+    DetailPost, ListCreateUsers
+    )
 
 class TestListCreatePostsView(TestCase):
     def test_view_properties(self):
@@ -125,3 +129,14 @@ class TestDetailUser(TestCase):
         # Then
         self.assertEqual(view.queryset.model.__name__, 'User')
         self.assertEqual(view.serializer_class.__name__, 'UserSerializer')
+
+
+class TestListCreateUsers(TestCase):
+    def test_view_properties(self):
+        # Given
+        view = ListCreateUsers()
+
+        # Then
+        self.assertEqual(view.queryset.model.__name__, 'User')
+        self.assertEqual(view.serializer_class.__name__, 'UserSerializer')
+
