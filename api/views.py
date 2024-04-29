@@ -1,4 +1,6 @@
-from rest_framework import generics
+from rest_framework.generics import (
+    RetrieveUpdateDestroyAPIView, ListCreateAPIView, RetrieveAPIView
+)
 from api import serializers
 from django.contrib.auth.models import User
 from api.models import Post, Comment
@@ -7,7 +9,7 @@ from api.permissions import IsOwnerOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-class ListCreatePosts(generics.ListCreateAPIView):
+class ListCreatePosts(ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = serializers.PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -18,7 +20,7 @@ class ListCreatePosts(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-class DetailPost(generics.RetrieveUpdateDestroyAPIView):
+class DetailPost(RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = serializers.PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
@@ -31,7 +33,7 @@ class DetailPost(generics.RetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
 
-class ListCreateComments(generics.ListCreateAPIView):
+class ListCreateComments(ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = serializers.CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -40,18 +42,18 @@ class ListCreateComments(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-class DetailComment(generics.RetrieveUpdateDestroyAPIView):
+class DetailComment(RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = serializers.CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
 
 
-class ListCreateUsers(generics.ListCreateAPIView):
+class ListCreateUsers(ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
 
 
-class DetailUser(generics.RetrieveAPIView):
+class DetailUser(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
