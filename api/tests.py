@@ -86,7 +86,7 @@ class TestDetailPostView(TestCase):
         mock_super().put.assert_called_once_with(mock_request)
 
 
-class TestListCreateComments(TestCase):
+class TestListCreateCommentsView(TestCase):
     def test_view_properties(self):
         # Given
         view = ListCreateComments()
@@ -111,7 +111,7 @@ class TestListCreateComments(TestCase):
         # Then
         mock_serializer.save.assert_called_once_with(owner=mock_request.user)
 
-class TestDetailComment(TestCase):
+class TestDetailCommentView(TestCase):
     def test_view_properties(self):
         # Given
         view = DetailComment()
@@ -122,7 +122,7 @@ class TestDetailComment(TestCase):
         self.assertEqual(view.permission_classes, [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly])
 
 
-class TestDetailUser(TestCase):
+class TestDetailUserView(TestCase):
     def test_view_properties(self):
         # Given
         view = DetailUser()
@@ -132,7 +132,7 @@ class TestDetailUser(TestCase):
         self.assertEqual(view.serializer_class.__name__, 'UserSerializer')
 
 
-class TestListCreateUsers(TestCase):
+class TestListCreateUsersView(TestCase):
     def test_view_properties(self):
         # Given
         view = ListCreateUsers()
