@@ -2,6 +2,7 @@ from django.test import TestCase
 from unittest.mock import patch, Mock, MagicMock
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
+from api.filters import DraftOwnerFilterBackend
 from api.permissions import IsOwnerOrReadOnly
 from api.serializers import PostSerializer, UserSerializer
 from api.views import (
@@ -19,7 +20,7 @@ class TestListCreatePostsView(TestCase):
         self.assertEqual(view.queryset.model.__name__, 'Post')
         self.assertEqual(view.serializer_class.__name__, 'PostSerializer')
         self.assertEqual(view.permission_classes, [IsAuthenticatedOrReadOnly])
-        self.assertEqual(view.filter_backends, [DjangoFilterBackend])
+        self.assertEqual(view.filter_backends, [DraftOwnerFilterBackend])
         self.assertEqual(view.filterset_fields, '__all__')
 
 
@@ -219,3 +220,31 @@ class TestUserSerializer(TestCase):
         )
         self.assertEqual(result, mock_validated_data)
 
+
+class TestFilters(TestCase):
+    @parameterized.expand([
+        ['draft'],
+        ['published']
+    ])
+    @patch('api.filters.Q')
+    def test_filter_queryset(self, mock_status, mock_q):
+        # Given
+        filter_backend = DraftOwnerFilterBackend()
+        mock_request = Mock(GET={'status': mock_status}, user='mock_user')
+        mock_queryset = Mock()
+        mock_view = Mock()
+
+        mock_criteria = mock_q()
+        mock_criteria &= mock_q(status=mock_status)
+
+        if mock_status == 'draft':
+            mock_criteria &= mock_q(owner='mock_user')
+
+        mock_queryset.filter = Mock(return_value='mock_queryset')
+
+        # When
+        result = filter_backend.filter_queryset(mock_request, mock_queryset, mock_view)
+
+        # Then
+        mock_queryset.filter.assert_called_once_with(mock_criteria)
+        self.assertEqual(result, 'mock_queryset')
