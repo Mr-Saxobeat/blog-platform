@@ -105,3 +105,23 @@ class TestListCreateComments(TestCase):
 
         # Then
         mock_serializer.save.assert_called_once_with(owner=mock_request.user)
+
+class TestDetailComment(TestCase):
+    def test_view_properties(self):
+        # Given
+        view = DetailComment()
+
+        # Then
+        self.assertEqual(view.queryset.model.__name__, 'Comment')
+        self.assertEqual(view.serializer_class.__name__, 'CommentSerializer')
+        self.assertEqual(view.permission_classes, [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly])
+
+
+class TestDetailUser(TestCase):
+    def test_view_properties(self):
+        # Given
+        view = DetailUser()
+
+        # Then
+        self.assertEqual(view.queryset.model.__name__, 'User')
+        self.assertEqual(view.serializer_class.__name__, 'UserSerializer')
