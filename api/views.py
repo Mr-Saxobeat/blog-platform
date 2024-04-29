@@ -30,7 +30,7 @@ class DetailPost(RetrieveUpdateDestroyAPIView):
     
     def put(self, request, *args, **kwargs):
         post = self.get_object()
-        post_serializer = PostSerializer(post, data=request.data)
+        post_serializer = self.serializer_class(post, data=request.data)
         post_serializer.title = request.data.get('title', post.title)
         post_serializer.body = request.data.get('body', post.body)
 
